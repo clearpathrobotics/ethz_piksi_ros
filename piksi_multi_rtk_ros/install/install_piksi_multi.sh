@@ -6,16 +6,17 @@ REPO_TAG=v2.6.5 #version you want to checkout before installing
 echo " "
 echo "Installing SBP library for Piksi Multi."
 
-sudo apt install python-pip
-sudo pip install sbp==$REPO_TAG
-sudo pip install llvmlite --upgrade
+sudo apt install python3-pip
+sudo pip3 install sbp==$REPO_TAG
+# sudo pip install llvmlite --upgrade
 
 echo "SBP Library Installed"
 
 echo "Installing ROS node requirements."
-sudo pip install numpy-quaternion
-sudo pip install scipy
-sudo pip install pyproj
+sudo pip3 install numpy-quaternion==2020.11.2.17.0.49
+# sudo pip3 install scipy==0.19.1
+sudo pip3 install pyproj==2.2.2
+# sudo apt install python3-pyproj
 
 #---------------- Dialout Group ----------------
 if id -nG "$USER" | grep -qw dialout; then

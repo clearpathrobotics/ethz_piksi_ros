@@ -24,7 +24,6 @@ Python 2.6+, Python 3, Jython, Pypy support.
 [3]: https://github.com/eggert/tz/blob/master/zic.c
 [4]: http://datacenter.iers.org/eop/-/somos/5Rgv/latest/16
 """
-from __future__ import with_statement
 
 from collections import namedtuple
 from datetime import datetime, timedelta

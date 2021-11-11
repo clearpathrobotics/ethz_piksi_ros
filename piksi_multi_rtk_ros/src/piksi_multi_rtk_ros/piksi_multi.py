@@ -48,7 +48,7 @@ from sbp.ext_events import *
 # At the moment importing 'sbp.version' module causes ValueError: Cannot find the version number!
 # import sbp.version
 # networking stuff
-import UdpHelpers
+from . import UdpHelpers
 import time
 import subprocess
 import re

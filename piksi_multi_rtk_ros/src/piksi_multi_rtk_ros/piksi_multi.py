@@ -11,7 +11,15 @@ import rospy
 import math
 import quaternion
 import numpy as np
-import datetime, time, leapseconds
+import sys
+if sys.version_info[0] == 2:
+    import leapseconds
+    import UdpHelpers
+else:
+    from .leapseconds import leapseconds
+    import piksi_multi_rtk_ros.UdpHelpers as UdpHelpers
+
+import datetime, time
 from collections import deque
 import std_srvs.srv
 # Import message types
@@ -48,17 +56,14 @@ from sbp.ext_events import *
 # At the moment importing 'sbp.version' module causes ValueError: Cannot find the version number!
 # import sbp.version
 # networking stuff
-from . import UdpHelpers
-import time
 import subprocess
 import re
 import threading
-import sys
 import collections
 
 
 class PiksiMulti:
-    LIB_SBP_VERSION_MULTI = '2.6.5'  # SBP version used for Piksi Multi.
+    LIB_SBP_VERSION_MULTI = '3.4.10'  # SBP version used for Piksi Multi.
 
     # Geodetic Constants.
     kSemimajorAxis = 6378137.0
@@ -499,6 +504,7 @@ class PiksiMulti:
             ping = subprocess.Popen(command, stdout=subprocess.PIPE)
 
             out, error = ping.communicate()
+            out = str(out)
             # Search for 'min/avg/max/mdev' round trip delay time (rtt) numbers.
             matcher = re.compile("(\d+.\d+)/(\d+.\d+)/(\d+.\d+)/(\d+.\d+)")
 
@@ -1453,7 +1459,7 @@ class PiksiMulti:
         out, error = pip_show_output.communicate()
 
         # Search for version number, output assumed in the form "Version: X.X.X"
-        version_output = re.search("Version: \d+.\d+.\d+", out)
+        version_output = re.search("Version: \d+.\d+.\d+", str(out))
 
         if version_output is None:
             # No version found
@@ -1495,7 +1501,7 @@ class PiksiMulti:
         Response to a settings_read_req.
         """
         msg = MsgSettingsReadResp(msg_raw)
-        setting_string = msg.setting.split('\0')
+        setting_string = msg.setting.split(b'\0')
         self.last_section_setting_read = setting_string[0]
         self.last_setting_read = setting_string[1]
         self.last_value_read = setting_string[2]
@@ -1512,7 +1518,7 @@ class PiksiMulti:
         Response to a settings_read_by_index_req.
         """
         msg = MsgSettingsReadByIndexResp(msg_raw)
-        setting_string = msg.setting.split('\0')
+        setting_string = msg.setting.split(b'\0')
         self.last_section_setting_read = setting_string[0]
         self.last_setting_read = setting_string[1]
         self.last_value_read = setting_string[2]

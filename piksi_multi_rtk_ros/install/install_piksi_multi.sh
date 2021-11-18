@@ -1,22 +1,42 @@
 #!/bin/bash
 
-REPO_TAG=v2.6.5 #version you want to checkout before installing
-
 #---------------- SBP ----------------
 echo " "
-echo "Installing SBP library for Piksi Multi."
 
-sudo apt install python3-pip
-sudo pip3 install sbp==$REPO_TAG
-# sudo pip install llvmlite --upgrade
+if [ $ROS_PYTHON_VERSION == 2 ]; then
+	echo "Installing on Python2"
+	echo "Installing SBP library for Piksi Multi."
 
-echo "SBP Library Installed"
+	REPO_TAG=v2.6.5 #version you want to checkout before installing
+	
+	sudo apt install python-pip
+	sudo pip install sbp==$REPO_TAG
 
-echo "Installing ROS node requirements."
-sudo pip3 install numpy-quaternion==2020.11.2.17.0.49
-# sudo pip3 install scipy==0.19.1
-sudo pip3 install pyproj==2.2.2
-# sudo apt install python3-pyproj
+	echo "SBP Library Installed"
+
+	echo "Installing ROS node requirements."
+	sudo pip install numpy-quaternion==2020.11.2.17.0.49
+	sudo pip install scipy==0.19.1
+	sudo pip install pyproj==2.2.2
+
+elif [ $ROS_PYTHON_VERSION == 3 ]; then
+	echo "Installing on Python3"
+	echo "Installing SBP library for Piksi Multi."
+	
+	REPO_TAG=v3.4.10 #version you want to checkout before installing
+	
+	sudo apt install python3-pip
+	sudo pip3 install sbp==$REPO_TAG
+	sudo pip3 install llvmlite --upgrade
+	sudo pip3 install numba
+
+	echo "SBP Library Installed"
+
+	echo "Installing ROS node requirements."
+	sudo pip3 install numpy-quaternion
+	sudo pip3 install scipy
+	sudo pip3 install pyproj
+fi
 
 #---------------- Dialout Group ----------------
 if id -nG "$USER" | grep -qw dialout; then

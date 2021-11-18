@@ -63,7 +63,10 @@ import collections
 
 
 class PiksiMulti:
-    LIB_SBP_VERSION_MULTI = '3.4.10'  # SBP version used for Piksi Multi.
+    if sys.version_info[0] == 2:
+        LIB_SBP_VERSION_MULTI = '2.6.5'  # SBP version used for Piksi Multi.
+    else
+        LIB_SBP_VERSION_MULTI = '3.4.10'  # SBP version used for Piksi Multi.
 
     # Geodetic Constants.
     kSemimajorAxis = 6378137.0

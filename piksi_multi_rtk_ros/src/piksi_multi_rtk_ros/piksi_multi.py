@@ -65,7 +65,7 @@ import collections
 class PiksiMulti:
     if sys.version_info[0] == 2:
         LIB_SBP_VERSION_MULTI = '2.6.5'  # SBP version used for Piksi Multi.
-    else
+    else:
         LIB_SBP_VERSION_MULTI = '3.4.10'  # SBP version used for Piksi Multi.
 
     # Geodetic Constants.

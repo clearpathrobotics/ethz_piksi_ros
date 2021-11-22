@@ -1480,7 +1480,8 @@ class PiksiMulti:
         Write the defined configuration to Swift receiver.
         """
         setting_string = '%s\0%s\0%s\0' % (section_setting, setting, value)
-        setting_string = setting_string.encode('utf-8')
+        if sys.version_info[0] != 2:
+            setting_string = setting_string.encode('utf-8')
         write_msg = MsgSettingsWrite(setting=setting_string)
         self.framer(write_msg)
 
@@ -1497,7 +1498,8 @@ class PiksiMulti:
         Request a configuration value to Swift receiver.
         """
         setting_string = '%s\0%s\0' % (section_setting, setting)
-        setting_string = setting_string.encode('utf-8')
+        if sys.version_info[0] != 2:
+            setting_string = setting_string.encode('utf-8')
         read_req_msg = MsgSettingsReadReq(setting=setting_string)
         self.framer(read_req_msg)
 
@@ -1506,16 +1508,21 @@ class PiksiMulti:
         Response to a settings_read_req.
         """
         msg = MsgSettingsReadResp(msg_raw)
-        setting_string = msg.setting.split(b'\0')
-        self.last_section_setting_read = setting_string[0].decode('utf-8')
-        self.last_setting_read = setting_string[1].decode('utf-8')
-        self.last_value_read = setting_string[2].decode('utf-8')
+        if sys.version_info[0] == 2:
+            setting_string = msg.setting.split('\0')
+            self.last_section_setting_read = setting_string[0]
+            self.last_setting_read = setting_string[1]
+            self.last_value_read = setting_string[2]
+        else:
+            setting_string = msg.setting.split(b'\0')
+            self.last_section_setting_read = setting_string[0].decode('utf-8')
+            self.last_setting_read = setting_string[1].decode('utf-8')
+            self.last_value_read = setting_string[2].decode('utf-8')
 
     def settings_read_by_index_req(self, index):
         """
         Request a configuration value to Swift receiver by parameter index number.
         """
-        rospy.loginfo("settings_read_by_index_req()")
         read_req_by_index_msg = MsgSettingsReadByIndexReq(index=index)
         self.framer(read_req_by_index_msg)
 
@@ -1524,10 +1531,16 @@ class PiksiMulti:
         Response to a settings_read_by_index_req.
         """
         msg = MsgSettingsReadByIndexResp(msg_raw)
-        setting_string = msg.setting.split(b'\0')
-        self.last_section_setting_read = setting_string[0].decode('utf-8')
-        self.last_setting_read = setting_string[1].decode('utf-8')
-        self.last_value_read = setting_string[2].decode('utf-8')
+        if sys.version_info[0] == 2:
+            setting_string = msg.setting.split('\0')
+            self.last_section_setting_read = setting_string[0]
+            self.last_setting_read = setting_string[1]
+            self.last_value_read = setting_string[2]
+        else:
+            setting_string = msg.setting.split(b'\0')
+            self.last_section_setting_read = setting_string[0].decode('utf-8')
+            self.last_setting_read = setting_string[1].decode('utf-8')
+            self.last_value_read = setting_string[2].decode('utf-8')
 
     def cb_sbp_imu_raw(self, msg_raw, **metadata):
         msg = MsgImuRaw(msg_raw)

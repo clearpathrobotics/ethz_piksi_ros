@@ -18,6 +18,7 @@
   <depend>rqt_gui_cpp</depend>
   <depend>piksi_rtk_msgs</depend>
   <depend>sensor_msgs</depend>
+  <depend>qtbase5-dev</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
